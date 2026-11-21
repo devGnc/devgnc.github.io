@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — Devrim Genc</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<script>
+  (function () {
+    var d = document.documentElement, s = null;
+    try { s = window.localStorage; } catch (e) {}
+    var l = s && s.getItem("lang");
+    if (l === "fr" || l === "en") d.lang = l;
+    var t = s && s.getItem("theme");
+    if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    d.setAttribute("data-theme", t);
+  })();
+</script>
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+<main class="wrap" style="padding-top:96px;padding-bottom:96px">
+  <h1 class="page-title"><span data-lang="en">Page not found</span><span data-lang="fr">Page introuvable</span></h1>
+  <p class="page-lead"><a href="/"><span data-lang="en">Back to the home page</span><span data-lang="fr">Retour à l'accueil</span></a></p>
+</main>
+</body>
+</html>

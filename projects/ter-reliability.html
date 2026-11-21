@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-title-en="TER Hauts-de-France reliability — Devrim Genc" data-title-fr="Fiabilité des TER Hauts-de-France — Devrim Genc">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TER Hauts-de-France reliability — Devrim Genc</title>
+<meta name="description" data-i18n="content" data-content-en="Work in progress: rebuilding line-by-line reliability of TER Hauts-de-France trains from archived SNCF real-time data (Python, PostgreSQL, SQL, Power BI). Feasibility study and method decisions." data-content-fr="Projet en cours&nbsp;: reconstruire la fiabilité ligne par ligne des TER Hauts-de-France à partir du flux temps réel SNCF archivé (Python, PostgreSQL, SQL, Power BI). Étude de faisabilité et décisions de méthode." content="Work in progress: rebuilding line-by-line reliability of TER Hauts-de-France trains from archived SNCF real-time data (Python, PostgreSQL, SQL, Power BI). Feasibility study and method decisions.">
+<meta name="theme-color" content="#F7F6F2">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+  (function () {
+    var d = document.documentElement, s = null;
+    try { s = window.localStorage; } catch (e) {}
+    var l = s && s.getItem("lang");
+    if (l === "fr" || l === "en") d.lang = l;
+    var t = s && s.getItem("theme");
+    if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    d.setAttribute("data-theme", t);
+  })();
+</script>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main"><span data-lang="en">Skip to content</span><span data-lang="fr">Aller au contenu</span></a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../">devrim_genc</a>
+    <nav aria-label="Main" data-i18n="aria-label" data-aria-label-en="Main" data-aria-label-fr="Principale">
+      <ul class="nav-links">
+        <li><a href="../#projects"><span data-lang="en">Projects</span><span data-lang="fr">Projets</span></a></li>
+        <li><a href="../#about"><span data-lang="en">About</span><span data-lang="fr">Parcours</span></a></li>
+        <li><a href="../#skills"><span data-lang="en">Skills</span><span data-lang="fr">Compétences</span></a></li>
+        <li><a href="../assets/cv/devrim-genc-cv.pdf">CV</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="controls">
+      <div class="lang-switch" role="group" aria-label="Language / Langue">
+        <button type="button" data-set-lang="en" aria-pressed="true" lang="en">EN</button>
+        <button type="button" data-set-lang="fr" aria-pressed="false" lang="fr">FR</button>
+      </div>
+      <button type="button" class="theme-btn" data-theme-toggle aria-label="Switch to dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+    <p class="crumbs"><a href="../#projects"><span data-lang="en">Projects</span><span data-lang="fr">Projets</span></a> / 02</p>
+    <p class="kicker" style="margin-top:14px"><span class="badge badge--progress"><span data-lang="en">In progress · phase 0 of 6</span><span data-lang="fr">En cours · phase 0 sur 6</span></span></p>
+    <h1 class="page-title" style="margin-top:4px"><span data-lang="en">TER Hauts-de-France reliability</span><span data-lang="fr">Fiabilité des TER Hauts-de-France</span></h1>
+    <p class="page-lead" data-lang="en">Which TER Hauts-de-France lines are the least reliable, when, and where should the Region focus its efforts? The Region, which organises regional rail services, is treated as a fictional client; the project will end with at most three quantified recommendations. <strong>The analysis has not started yet</strong>: this page shows the question, the architecture, the method decisions and the feasibility study.</p>
+    <p class="page-lead" data-lang="fr">Quelles lignes TER Hauts-de-France sont les moins fiables, à quels moments, et où la Région devrait-elle concentrer ses efforts&nbsp;? La Région, autorité organisatrice des TER, est traitée comme un client fictif&nbsp;; le projet se conclura par trois recommandations chiffrées au maximum. <strong>L'analyse n'a pas encore commencé</strong>&nbsp;: cette page présente la question, l'architecture, les décisions de méthode et l'étude de faisabilité.</p>
+
+    <div class="page-links">
+      <ul class="tags" aria-label="Stack"><li>Python · pandas</li><li>PostgreSQL (Supabase)</li><li>SQL</li><li>Power BI</li><li>GTFS / GTFS-RT</li></ul>
+    </div>
+    <div class="page-links">
+      <a class="btn btn--primary" href="https://github.com/devGnc/ter-hauts-de-france-reliability"><span data-lang="en">Repository on GitHub</span><span data-lang="fr">Dépôt sur GitHub</span></a>
+      <a class="btn btn--ghost" href="https://github.com/devGnc/ter-hauts-de-france-reliability/blob/main/docs/phase0_feasibility.md"><span data-lang="en">Feasibility report</span><span data-lang="fr">Rapport de faisabilité (en anglais)</span></a>
+      <a class="btn btn--ghost" href="https://github.com/devGnc/ter-hauts-de-france-reliability/blob/main/DECISIONS.md"><span data-lang="en">Decision log</span><span data-lang="fr">Journal des décisions (en anglais)</span></a>
+    </div>
+
+    <section class="summary" aria-label="Summary" data-i18n="aria-label" data-aria-label-en="Summary" data-aria-label-fr="En bref">
+      <div><span class="label"><span data-lang="en">The gap</span><span data-lang="fr">Le manque</span></span><p class="sub" data-lang="en">Official open data only publishes TER punctuality per region and per month. No public source gives it per line.</p><p class="sub" data-lang="fr">L'open data officiel ne publie la ponctualité des TER que par région et par mois. Aucune source publique ne la donne par ligne.</p></div>
+      <div><span class="label"><span data-lang="en">Approach</span><span data-lang="fr">Approche</span></span><p class="sub" data-lang="en">Archive the SNCF real-time feed for 4 to 8 weeks, analyse it in SQL, present it in Power BI.</p><p class="sub" data-lang="fr">Archiver le flux temps réel SNCF pendant 4 à 8 semaines, l'analyser en SQL, le restituer dans Power BI.</p></div>
+      <div><span class="label"><span data-lang="en">Feasibility, round 1</span><span data-lang="fr">Faisabilité, série 1</span></span><span class="big big--progress">404/404</span><p class="sub" data-lang="en">scheduled Hauts-de-France trains found in the feed (3 snapshots)</p><p class="sub" data-lang="fr">trains Hauts-de-France prévus retrouvés dans le flux (3 photos)</p></div>
+      <div><span class="label"><span data-lang="en">Scope</span><span data-lang="fr">Périmètre</span></span><span class="big big--plain">65</span><p class="sub" data-lang="en">rail lines, defined from the Region's own timetable data (D1)</p><p class="sub" data-lang="fr">lignes ferroviaires, définies à partir des données horaires de la Région (D1)</p></div>
+    </section>
+
+    <section class="block split" aria-labelledby="status-h">
+      <h2 id="status-h"><span data-lang="en">Status &amp; timeline</span><span data-lang="fr">Avancement et calendrier</span></h2>
+      <ol class="phases">
+        <li class="is-current"><span class="phase-dot">0</span><div><p class="phase-name"><span data-lang="en">Feasibility test and go / no-go</span><span data-lang="fr">Test de faisabilité et décision go / no-go</span></p><p class="phase-when"><span data-lang="en">September – November 2026</span><span data-lang="fr">Septembre – novembre 2026</span></p><p class="phase-state"><span data-lang="en">Report written · round 2 measurements and decision pending</span><span data-lang="fr">Rapport rédigé · série 2 de mesures et décision en attente</span></p></div></li>
+        <li><span class="phase-dot">1</span><div><p class="phase-name"><span data-lang="en">Static reference data in PostgreSQL</span><span data-lang="fr">Référentiel statique dans PostgreSQL</span></p><p class="phase-when"><span data-lang="en">Before collection starts</span><span data-lang="fr">Avant le début de la collecte</span></p></div></li>
+        <li><span class="phase-dot">2</span><div><p class="phase-name"><span data-lang="en">Automated collection</span><span data-lang="fr">Collecte automatisée</span></p><p class="phase-when"><span data-lang="en">December 2026 – January 2027 (4 weeks minimum, ideally 8)</span><span data-lang="fr">Décembre 2026 – janvier 2027 (4 semaines minimum, idéalement 8)</span></p></div></li>
+        <li><span class="phase-dot">3</span><div><p class="phase-name"><span data-lang="en">Transformation and validation against official figures</span><span data-lang="fr">Transformation et validation face aux chiffres officiels</span></p><p class="phase-when"><span data-lang="en">On the first weeks of data, finalised after collection</span><span data-lang="fr">Sur les premières semaines de données, finalisée après la collecte</span></p></div></li>
+        <li><span class="phase-dot">4</span><div><p class="phase-name"><span data-lang="en">SQL analysis</span><span data-lang="fr">Analyse SQL</span></p><p class="phase-when"><span data-lang="en">During and after collection</span><span data-lang="fr">Pendant et après la collecte</span></p></div></li>
+        <li><span class="phase-dot">5</span><div><p class="phase-name"><span data-lang="en">Power BI dashboard</span><span data-lang="fr">Tableau de bord Power BI</span></p><p class="phase-when"><span data-lang="en">After collection (early 2027)</span><span data-lang="fr">Après la collecte (début 2027)</span></p></div></li>
+        <li><span class="phase-dot">6</span><div><p class="phase-name"><span data-lang="en">Recommendations and publication</span><span data-lang="fr">Recommandations et publication</span></p><p class="phase-when"><span data-lang="en">Early 2027</span><span data-lang="fr">Début 2027</span></p></div></li>
+      </ol>
+    </section>
+
+    <section class="block block-rule split" aria-labelledby="arch-h">
+      <h2 id="arch-h">Architecture</h2>
+      <div>
+        <figure class="diagram-box">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <ol class="flow" aria-label="Real-time flow" data-i18n="aria-label" data-aria-label-en="Real-time flow" data-aria-label-fr="Flux temps réel">
+              <li><span class="node">GTFS-RT <small><span data-lang="en">every 2 min</span><span data-lang="fr">toutes les 2 min</span></small></span></li>
+              <li><span class="node"><span data-lang="en">Python collector</span><span data-lang="fr">Collecteur Python</span> <small><span data-lang="en">scheduled</span><span data-lang="fr">planifié</span></small></span></li>
+              <li><span class="node">PostgreSQL <small><span data-lang="en">raw tables</span><span data-lang="fr">tables brutes</span></small></span></li>
+              <li><span class="node"><span data-lang="en">SQL views</span><span data-lang="fr">Vues SQL</span> <small><span data-lang="en">cleaning + metrics</span><span data-lang="fr">nettoyage + indicateurs</span></small></span></li>
+              <li><span class="node">Power BI <small>dashboard</small></span></li>
+            </ol>
+            <ol class="flow" aria-label="Reference data flow" data-i18n="aria-label" data-aria-label-en="Reference data flow" data-aria-label-fr="Flux du référentiel">
+              <li><span class="node"><span data-lang="en">Regional GTFS</span><span data-lang="fr">GTFS régional</span> <small><span data-lang="en">static timetable</span><span data-lang="fr">horaires théoriques</span></small></span></li>
+              <li><span class="node"><span data-lang="en">Python loader</span><span data-lang="fr">Chargeur Python</span></span></li>
+              <li><span class="node">PostgreSQL <small><span data-lang="en">raw tables</span><span data-lang="fr">tables brutes</span></small></span></li>
+            </ol>
+          </div>
+          <figcaption><span data-lang="en">Fig. 1 — Planned pipeline.</span><span data-lang="fr">Fig. 1 — Chaîne de traitement prévue.</span></figcaption>
+        </figure>
+        <ul class="list" style="margin-top:20px">
+          <li data-lang="en"><strong>Python only moves data.</strong> All analytical logic lives in SQL, inside the database.</li>
+          <li data-lang="fr"><strong>Python ne fait que déplacer les données.</strong> Toute la logique d'analyse est en SQL, dans la base.</li>
+          <li data-lang="en"><strong>Raw observations are never modified</strong>, so every metric can be recomputed.</li>
+          <li data-lang="fr"><strong>Les observations brutes ne sont jamais modifiées</strong>&nbsp;: chaque indicateur peut être recalculé.</li>
+          <li data-lang="en"><strong>Out of scope:</strong> delay prediction (machine learning) and root-cause analysis — the data does not contain causes.</li>
+          <li data-lang="fr"><strong>Hors périmètre&nbsp;:</strong> prédiction des retards (machine learning) et analyse des causes — les données ne les contiennent pas.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block block-rule split" aria-labelledby="dec-h">
+      <h2 id="dec-h"><span data-lang="en">Method decisions</span><span data-lang="fr">Décisions de méthode</span></h2>
+      <div class="cards">
+        <div class="card"><span class="label">D1</span><h3><span data-lang="en">Scope: 65 rail lines</span><span data-lang="fr">Périmètre&nbsp;: 65 lignes</span></h3><p data-lang="en">Defined by the GTFS published by the Region (71 lines), minus coach lines and four lines most likely run by TER Grand Est. Rejected: agency IDs and line codes, which are not unique nationally.</p><p data-lang="fr">Défini par le GTFS publié par la Région (71 lignes), moins les lignes de car et quatre lignes vraisemblablement exploitées par TER Grand Est. Écartés&nbsp;: les identifiants d'agence et les codes de ligne, non uniques au niveau national.</p></div>
+        <div class="card"><span class="label">D2</span><h3><span data-lang="en">Trip key: train number + date</span><span data-lang="fr">Clé de trajet&nbsp;: numéro + date</span></h3><p data-lang="en">The GTFS <code>trip_id</code> contains an export timestamp and changes between versions; a join on it would lose trains without any visible error.</p><p data-lang="fr">Le <code>trip_id</code> du GTFS contient un horodatage d'export et change d'une version à l'autre&nbsp;; une jointure dessus perdrait des trains sans erreur visible.</p></div>
+        <div class="card"><span class="label">D3</span><h3><span data-lang="en">“Scheduled” = what the feed shows</span><span data-lang="fr">« Prévu » = ce que montre le flux</span></h3><p data-lang="en">A train counts as scheduled at time T if it is running or departs within 60 minutes. Counting running trains only would have inflated coverage by about 60&nbsp;%.</p><p data-lang="fr">Un train est prévu à l'instant T s'il circule ou part dans les 60 minutes. Ne compter que les trains en circulation aurait gonflé la couverture d'environ 60&nbsp;%.</p></div>
+        <div class="card"><span class="label">D4</span><h3><span data-lang="en">Replacement coaches excluded</span><span data-lang="fr">Cars de remplacement exclus</span></h3><p data-lang="en">The feed barely tracks coaches (1 of 13 observed). The project measures train reliability; coach services are stated as a limitation.</p><p data-lang="fr">Le flux ne suit presque pas les cars (1 sur 13 observés). Le projet mesure la fiabilité des trains&nbsp;; les cars sont signalés comme limite.</p></div>
+      </div>
+    </section>
+
+    <section class="block block-rule" aria-labelledby="p0-h">
+      <h2 id="p0-h" style="font-size:1.6rem"><span data-lang="en">Feasibility study (phase 0)</span><span data-lang="fr">Étude de faisabilité (phase 0)</span></h2>
+      <p class="prose" style="margin-top:12px" data-lang="en">Question: does the SNCF real-time feed contain enough Hauts-de-France trains, in a usable form, to rebuild line-by-line reliability? Round 1: 23–26 September 2026, 5 snapshots of the feed.</p>
+      <p class="prose" style="margin-top:12px" data-lang="fr">Question&nbsp;: le flux temps réel SNCF contient-il assez de trains Hauts-de-France, sous une forme exploitable, pour reconstruire la fiabilité ligne par ligne&nbsp;? Série 1&nbsp;: 23–26 septembre 2026, 5 photos du flux.</p>
+
+      <div class="stack-grid">
+        <figure class="chart">
+          <p class="chart-title"><span data-lang="en">Coverage: are the Region's trains in the feed?</span><span data-lang="fr">Couverture&nbsp;: les trains de la Région sont-ils dans le flux&nbsp;?</span></p>
+          <ol class="chart-rows">
+            <li class="chart-row">
+              <div class="row-head"><span><span data-lang="en">1 · First pass</span><span data-lang="fr">1 · Premier passage</span></span><span class="row-value">79–88&nbsp;%</span></div>
+              <div class="bar bar--1" aria-hidden="true"><span style="width:79%"></span><span class="range" style="left:79%;width:9%"></span></div>
+              <p class="row-note"><span data-lang="en">9 lines at 0&nbsp;%: almost all the missing trains were in the feed under a second <code>trip_id</code> prefix (Picardy lines)</span><span data-lang="fr">9 lignes à 0&nbsp;%&nbsp;: presque tous les trains absents étaient dans le flux sous un second préfixe de <code>trip_id</code> (lignes picardes)</span></p>
+            </li>
+            <li class="chart-row">
+              <div class="row-head"><span><span data-lang="en">2 · Both prefixes handled</span><span data-lang="fr">2 · Les deux préfixes pris en compte</span></span><span class="row-value">89–99&nbsp;%</span></div>
+              <div class="bar bar--2" aria-hidden="true"><span style="width:89%"></span><span class="range" style="left:89%;width:10%"></span></div>
+              <p class="row-note"><span data-lang="en">The 12 trains still missing are all replacement coaches</span><span data-lang="fr">Les 12 trains encore absents sont tous des cars de remplacement</span></p>
+            </li>
+            <li class="chart-row chart-row--final">
+              <div class="row-head"><span><span data-lang="en">3 · Coaches excluded (D4)</span><span data-lang="fr">3 · Cars exclus (D4)</span></span><span class="row-value">100&nbsp;% · 404/404</span></div>
+              <div class="bar bar--3" aria-hidden="true"><span style="width:100%"></span></div>
+              <p class="row-note"><span data-lang="en">End of morning peak 103/103 · evening peak 238/238 · Saturday afternoon 63/63</span><span data-lang="fr">Fin de pointe du matin 103/103 · pointe du soir 238/238 · samedi après-midi 63/63</span></p>
+            </li>
+          </ol>
+          <figcaption>
+            <span data-lang="en">Fig. 2 — Share of scheduled Hauts-de-France trains found in the feed. Steps 1–2 over 3 to 5 snapshots (hatched: range across snapshots); step 3 on 3 snapshots with the final method. Weekday morning peak (07:30–08:30), off-peak and night not yet measured with it.</span>
+            <span data-lang="fr">Fig. 2 — Part des trains Hauts-de-France prévus retrouvés dans le flux. Étapes 1–2 sur 3 à 5 photos (hachures&nbsp;: écart entre photos)&nbsp;; étape 3 sur 3 photos avec la méthode finale. Pointe du matin en semaine (7 h 30–8 h 30), heures creuses et nuit pas encore mesurées avec elle.</span>
+          </figcaption>
+        </figure>
+
+        <div class="cards">
+          <div class="card"><span class="label"><span data-lang="en">Trip key (D2)</span><span data-lang="fr">Clé de trajet (D2)</span></span><h3><span data-lang="en">0 exact <code>trip_id</code> matches</span><span data-lang="fr">0 correspondance exacte de <code>trip_id</code></span></h3><p data-lang="en">On every snapshot, the static and real-time <code>trip_id</code> formats never match. Train number + service date finds every scheduled train once both prefixes are handled.</p><p data-lang="fr">Sur chaque photo, les formats de <code>trip_id</code> statique et temps réel ne correspondent jamais. Numéro de train + date retrouve tous les trains prévus une fois les deux préfixes gérés.</p></div>
+          <div class="card"><span class="label"><span data-lang="en">Delay fields</span><span data-lang="fr">Champs de retard</span></span><h3><span data-lang="en">≥ 99.5&nbsp;% of trains carry a delay</span><span data-lang="fr">≥ 99,5&nbsp;% des trains ont un retard renseigné</span></h3><p data-lang="en">But a delay is a forecast, sometimes an old one: one train in a 15:56 snapshot had last been updated at 13:08. Which observation counts is a phase 3 decision.</p><p data-lang="fr">Mais un retard est une prévision, parfois ancienne&nbsp;: un train d'une photo de 15 h 56 avait été mis à jour pour la dernière fois à 13 h 08. Quelle observation fait foi&nbsp;: décision de phase 3.</p></div>
+          <div class="card"><span class="label"><span data-lang="en">Storage</span><span data-lang="fr">Stockage</span></span><h3><span data-lang="en">37.7 GiB vs a 500 MB quota</span><span data-lang="fr">37,7 Gio face à un quota de 500 Mo</span></h3><p data-lang="en">Raw snapshots (mean 980 KiB) every 2 minutes for 8 weeks would be 77 times the free database quota; keeping Hauts-de-France trains only would still be about 4 GiB. A reduction strategy is needed before collection.</p><p data-lang="fr">Les photos brutes (980 Kio en moyenne) toutes les 2 minutes pendant 8 semaines feraient 77 fois le quota gratuit de la base&nbsp;; même filtrées sur les trains Hauts-de-France, environ 4 Gio. Une stratégie de réduction est nécessaire avant la collecte.</p></div>
+          <div class="card"><span class="label"><span data-lang="en">Pitfalls found</span><span data-lang="fr">Pièges trouvés</span></span><h3><span data-lang="en">Cancellations erased after the fact</span><span data-lang="fr">Suppressions effacées après coup</span></h3><p data-lang="en">Later timetable versions remove cancelled trains (8 cancellations → 1 for the same evening), the timetable is a rolling 90-day window, and the annual timetable change falls during collection (12–13 December 2026).</p><p data-lang="fr">Les versions ultérieures du GTFS retirent les trains supprimés (8 suppressions → 1 pour le même soir), le GTFS est une fenêtre glissante de 90 jours, et le changement de service annuel tombe pendant la collecte (12–13 décembre 2026).</p></div>
+        </div>
+
+        <div>
+          <div class="table-wrap">
+            <table>
+              <caption><span data-lang="en">Why the collection interval matters: trains leave the feed 4 to 5 minutes after arriving</span><span data-lang="fr">Pourquoi l'intervalle de collecte compte&nbsp;: les trains quittent le flux 4 à 5 minutes après leur arrivée</span></caption>
+              <thead>
+                <tr><th scope="col"><span data-lang="en">Interval</span><span data-lang="fr">Intervalle</span></th><th scope="col"><span data-lang="en">Trains caught after arrival, window 4 min</span><span data-lang="fr">Trains vus après l'arrivée, fenêtre 4 min</span></th><th scope="col"><span data-lang="en">Window 5 min</span><span data-lang="fr">Fenêtre 5 min</span></th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">2 min</th><td><div class="cell-bar"><div class="bar" aria-hidden="true"><span style="width:100%"></span></div><span class="num">100&nbsp;%</span></div></td><td class="num">100&nbsp;%</td></tr>
+                <tr><th scope="row">3 min</th><td><div class="cell-bar"><div class="bar" aria-hidden="true"><span style="width:100%"></span></div><span class="num">100&nbsp;%</span></div></td><td class="num">100&nbsp;%</td></tr>
+                <tr><th scope="row">4 min</th><td><div class="cell-bar"><div class="bar" aria-hidden="true"><span style="width:100%"></span></div><span class="num">100&nbsp;%</span></div></td><td class="num">100&nbsp;%</td></tr>
+                <tr><th scope="row">5 min</th><td><div class="cell-bar"><div class="bar is-short" aria-hidden="true"><span style="width:80%"></span></div><span class="num">80&nbsp;%</span></div></td><td class="num">100&nbsp;%</td></tr>
+                <tr><th scope="row">10 min</th><td><div class="cell-bar"><div class="bar is-short" aria-hidden="true"><span style="width:40%"></span></div><span class="num">40&nbsp;%</span></div></td><td class="num">50&nbsp;%</td></tr>
+                <tr><th scope="row">15 min</th><td><div class="cell-bar"><div class="bar is-short" aria-hidden="true"><span style="width:27%"></span></div><span class="num">27&nbsp;%</span></div></td><td class="num">33&nbsp;%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:10px;color:var(--muted);font-size:.875rem" data-lang="en">Share = min(1, W / Δ) for perfectly on-time snapshots. Hence an interval of 4 minutes or less, actually respected, which rules out a plain 5-minute scheduled job.</p>
+          <p style="margin-top:10px;color:var(--muted);font-size:.875rem" data-lang="fr">Part = min(1, W / Δ) pour des photos parfaitement à l'heure. D'où un intervalle de 4 minutes au plus, réellement respecté, ce qui exclut une simple tâche planifiée toutes les 5 minutes.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block block-rule split" aria-labelledby="next-h">
+      <h2 id="next-h"><span data-lang="en">Next step</span><span data-lang="fr">Prochaine étape</span></h2>
+      <div class="prose">
+        <p data-lang="en">The report proposes <strong>go, on three conditions</strong>; the decision is still pending:</p>
+        <p data-lang="fr">Le rapport propose <strong>go, sous trois conditions</strong>&nbsp;; la décision reste à prendre&nbsp;:</p>
+        <ol class="list">
+          <li data-lang="en">confirm coverage on the current timetable (round 2), including the weekday morning peak;</li>
+          <li data-lang="fr">confirmer la couverture sur les horaires actuels (série 2), pointe du matin comprise&nbsp;;</li>
+          <li data-lang="en">choose a collection interval of 4 minutes or less and a host that respects it;</li>
+          <li data-lang="fr">choisir un intervalle de collecte de 4 minutes au plus et un hébergement qui le respecte&nbsp;;</li>
+          <li data-lang="en">define a storage strategy that fits within 500 MB.</li>
+          <li data-lang="fr">définir une stratégie de stockage qui tienne dans 500 Mo.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="block block-rule split" aria-labelledby="lim-h">
+      <h2 id="lim-h"><span data-lang="en">Limitations</span><span data-lang="fr">Limites</span></h2>
+      <ul class="list">
+        <li data-lang="en"><strong>Short observation window:</strong> 4 to 8 weeks between December 2026 and January 2027, including the Christmas holidays and the timetable change. Results will not be representative of a full year.</li>
+        <li data-lang="fr"><strong>Fenêtre d'observation courte&nbsp;:</strong> 4 à 8 semaines entre décembre 2026 et janvier 2027, vacances de Noël et changement de service compris. Les résultats ne seront pas représentatifs d'une année entière.</li>
+        <li data-lang="en"><strong>Feed coverage:</strong> a scheduled train missing from the feed is treated as missing data, not as on time; the match rate is tracked.</li>
+        <li data-lang="fr"><strong>Couverture du flux&nbsp;:</strong> un train prévu absent du flux est une donnée manquante, pas un train à l'heure&nbsp;; le taux de correspondance est suivi.</li>
+        <li data-lang="en"><strong>Coach services</strong> are not tracked by the real-time feed and are excluded (D4).</li>
+        <li data-lang="fr"><strong>Les cars</strong> ne sont pas suivis par le flux temps réel et sont exclus (D4).</li>
+      </ul>
+    </section>
+
+    <p class="fine" style="margin-top:40px;color:var(--muted);font-size:.8rem" data-lang="en">Data © SNCF and Région Hauts-de-France, distributed via transport.data.gouv.fr and SNCF Open Data. No raw or derived data is published in the repository.</p>
+    <p class="fine" style="margin-top:40px;color:var(--muted);font-size:.8rem" data-lang="fr">Données © SNCF et Région Hauts-de-France, diffusées via transport.data.gouv.fr et SNCF Open Data. Aucune donnée brute ou dérivée n'est publiée dans le dépôt.</p>
+
+    <nav class="next-nav" aria-label="Project navigation" data-i18n="aria-label" data-aria-label-en="Project navigation" data-aria-label-fr="Navigation entre projets">
+      <a href="heat-diffusion.html"><span data-lang="en">← 01 · Heat diffusion</span><span data-lang="fr">← 01 · Diffusion thermique</span></a>
+      <a href="sov2242.html"><span data-lang="en">03 · SOV2242 →</span><span data-lang="fr">03 · SOV2242 →</span></a>
+    </nav>
+  </div>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <ul class="contact-links">
+      <li><a href="mailto:devrimgenc.pro@gmail.com">devrimgenc.pro@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/devrimgenc/">LinkedIn</a></li>
+      <li><a href="https://github.com/devGnc">GitHub</a></li>
+      <li><a href="../assets/cv/devrim-genc-cv.pdf">CV (PDF)</a></li>
+    </ul>
+    <p class="fine">© 2026 Devrim Genc</p>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>
