@@ -4,8 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Heat diffusion and fractal geometries — Devrim Genc</title>
-<meta name="description" data-i18n="content" data-content-en="C simulation of the heat equation comparing a square room with Koch snowflake rooms of equal area: +66&nbsp;% heat loss per degree at depth 3, and an empirical rule for the optimal depth." data-content-fr="Simulation en C de l'équation de la chaleur comparant une pièce carrée à des pièces en flocon de Koch de même aire&nbsp;: +66&nbsp;% de chaleur évacuée par degré à la profondeur 3, et une règle empirique de la profondeur optimale." content="C simulation of the heat equation comparing a square room with Koch snowflake rooms of equal area: +66&nbsp;% heat loss per degree at depth 3, and an empirical rule for the optimal depth.">
+<meta name="description" data-i18n="content" data-content-en="273 simulations from a C heat simulator, analysed in Python: a Koch snowflake room removes 66&nbsp;% more heat per degree than a square room of equal area, up to an optimal depth." data-content-fr="273 simulations issues d'un simulateur thermique en C, analysées en Python : une pièce en flocon de Koch évacue 66&nbsp;% de chaleur en plus par degré qu'une pièce carrée de même aire, jusqu'à une profondeur optimale." content="273 simulations from a C heat simulator, analysed in Python: a Koch snowflake room removes 66&nbsp;% more heat per degree than a square room of equal area, up to an optimal depth.">
 <meta name="theme-color" content="#F7F6F2">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Devrim Genc">
+<meta property="og:title" content="Heat diffusion and fractal geometries — Devrim Genc">
+<meta property="og:description" content="273 simulations from a C heat simulator, analysed in Python: +66 % heat loss per degree for a Koch snowflake room vs a square room.">
+<meta property="og:url" content="https://devgnc.github.io/projects/heat-diffusion.html">
+<meta property="og:image" content="https://devgnc.github.io/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Devrim Genc — data portfolio">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://devgnc.github.io/projects/heat-diffusion.html">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="../assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script>
@@ -53,11 +64,13 @@
   <div class="wrap">
     <p class="crumbs"><a href="../#projects"><span data-lang="en">Projects</span><span data-lang="fr">Projets</span></a> / 01</p>
     <h1 class="page-title"><span data-lang="en">Heat diffusion and fractal geometries</span><span data-lang="fr">Diffusion thermique et géométries fractales</span></h1>
-    <p class="page-lead" data-lang="en">A personal research project that grew out of my <strong>TIPE</strong> — a research project carried out during French preparatory classes and presented at the engineering schools' entrance exams. The TIPE was done in a pair on the shared theme “fractals and architecture”; this simulation is entirely my own work, and I have rebuilt and extended it on my own since November 2026.</p>
-    <p class="page-lead" data-lang="fr">Un projet de recherche personnel né de mon <strong>TIPE</strong> (travail d'initiative personnelle encadré), mené en classe préparatoire et présenté aux concours des écoles d'ingénieurs. Le TIPE était fait en binôme sur le thème commun « fractales et architecture »&nbsp;; cette simulation est entièrement mon travail, et je l'ai reprise et étendue seul depuis novembre 2026.</p>
+    <p class="page-lead" data-lang="en">For the same floor area, does a fractal-shaped room get rid of heat better than a square one — and under what conditions? I built a heat simulator in C, generated 273 simulations covering 13 room shapes and 21 wall thicknesses, and analysed them in Python to find what actually drives heat loss.</p>
+    <p class="page-lead" data-lang="fr">À aire égale, une pièce en forme de fractale évacue-t-elle mieux la chaleur qu'une pièce carrée — et à quelles conditions&nbsp;? J'ai écrit un simulateur thermique en C, produit 273 simulations couvrant 13 formes de pièce et 21 épaisseurs de mur, puis je les ai analysées en Python pour trouver ce qui détermine vraiment la chaleur évacuée.</p>
+    <p class="page-lead page-context" data-lang="en">Context: a personal project that grew out of my <strong>TIPE</strong> — a research project carried out during French preparatory classes and presented at the engineering schools' entrance exams. The TIPE was done in a pair on the shared theme “fractals and architecture”; this simulation is entirely my own work, rebuilt and extended on my own since November 2026.</p>
+    <p class="page-lead page-context" data-lang="fr">Contexte&nbsp;: un projet personnel né de mon <strong>TIPE</strong> (travail d'initiative personnelle encadré), mené en classe préparatoire et présenté aux concours des écoles d'ingénieurs. Le TIPE était fait en binôme sur le thème commun « fractales et architecture »&nbsp;; cette simulation est entièrement mon travail, reprise et étendue seul depuis novembre 2026.</p>
 
     <div class="page-links">
-      <ul class="tags" aria-label="Stack"><li>C</li><li>SDL2</li><li>Python · NumPy · pandas · Matplotlib</li><li>LaTeX</li></ul>
+      <ul class="tags" aria-label="Stack"><li>C</li><li>Python · pandas · NumPy · Matplotlib</li><li>SDL2</li><li>LaTeX</li></ul>
     </div>
     <div class="page-links">
       <a class="btn btn--primary" href="https://github.com/devGnc/fractal-heat-diffusion"><span data-lang="en">Code on GitHub</span><span data-lang="fr">Code sur GitHub</span></a>
@@ -65,10 +78,10 @@
     </div>
 
     <section class="summary" aria-label="Summary" data-i18n="aria-label" data-aria-label-en="Summary" data-aria-label-fr="En bref">
-      <div><span class="label">Question</span><p class="sub" data-lang="en">Same floor area: does a fractal-shaped room shed heat better than a square one?</p><p class="sub" data-lang="fr">À aire égale, une pièce fractale évacue-t-elle mieux la chaleur qu'une pièce carrée&nbsp;?</p></div>
-      <div><span class="label"><span data-lang="en">Method</span><span data-lang="fr">Méthode</span></span><p class="sub" data-lang="en">Finite volumes, implicit ADI scheme with the Thomas algorithm, conjugate gradient; checked against an exact solution.</p><p class="sub" data-lang="fr">Volumes finis, schéma implicite ADI avec l'algorithme de Thomas, gradient conjugué&nbsp;; validé sur une solution exacte.</p></div>
+      <div><span class="label"><span data-lang="en">Metric</span><span data-lang="fr">Indicateur</span></span><p class="sub" data-lang="en">Conductance G: heat removed per degree of difference between inside and outside.</p><p class="sub" data-lang="fr">Conductance G&nbsp;: chaleur évacuée par degré d'écart entre l'intérieur et l'extérieur.</p></div>
+      <div><span class="label"><span data-lang="en">Dataset</span><span data-lang="fr">Données</span></span><span class="big big--plain">273</span><p class="sub" data-lang="en">simulations: 13 shapes × 21 wall thicknesses, same area</p><p class="sub" data-lang="fr">simulations&nbsp;: 13 formes × 21 épaisseurs de mur, même aire</p></div>
       <div><span class="label"><span data-lang="en">Result</span><span data-lang="fr">Résultat</span></span><span class="big">+66&nbsp;%</span><p class="sub" data-lang="en">heat loss per degree, depth-3 Koch snowflake vs square</p><p class="sub" data-lang="fr">de chaleur évacuée par degré, flocon de Koch de profondeur 3 face au carré</p></div>
-      <div><span class="label">Validation</span><span class="big big--plain">−0.45&nbsp;%</span><p class="sub" data-lang="en">error against the exact solution on 1.25 cm cells</p><p class="sub" data-lang="fr">d'erreur face à la solution exacte, mailles de 1,25 cm</p></div>
+      <div><span class="label">Validation</span><span class="big big--plain">−0.45&nbsp;%</span><p class="sub" data-lang="en">error against an exact solution</p><p class="sub" data-lang="fr">d'erreur face à une solution exacte</p></div>
     </section>
 
     <figure class="block">
@@ -90,7 +103,21 @@
       </figcaption>
     </figure>
 
-    <section class="block split" aria-labelledby="results-h">
+    <section class="block split" aria-labelledby="design-h">
+      <h2 id="design-h"><span data-lang="en">Study design</span><span data-lang="fr">Démarche</span></h2>
+      <ol class="list">
+        <li data-lang="en"><strong>Turn the question into one metric.</strong> Every room has the same floor area (36 m²) and the same heat source; I compare their conductance G, the heat removed per degree of temperature difference.</li>
+        <li data-lang="fr"><strong>Traduire la question en un indicateur.</strong> Chaque pièce a la même aire (36 m²) et la même source de chaleur&nbsp;; je compare leur conductance G, la chaleur évacuée par degré d'écart de température.</li>
+        <li data-lang="en"><strong>Generate the data.</strong> The C simulator computes one steady state per combination: 13 shapes (square, Koch snowflake at depths 0 to 4, and two control families) × 21 wall thicknesses from 5 to 45 cm = 273 runs.</li>
+        <li data-lang="fr"><strong>Produire les données.</strong> Le simulateur en C calcule un régime établi par combinaison&nbsp;: 13 formes (carré, flocon de Koch de profondeur 0 à 4 et deux familles témoins) × 21 épaisseurs de mur de 5 à 45 cm = 273 calculs.</li>
+        <li data-lang="en"><strong>Use control groups.</strong> A crenellated square with the same perimeter as each snowflake separates “more wall” from “detail at several scales”; the Minkowski island tests a second fractal.</li>
+        <li data-lang="fr"><strong>Utiliser des groupes témoins.</strong> Un carré crénelé de même périmètre que chaque flocon sépare l'effet « plus de mur » de l'effet « détails à plusieurs échelles »&nbsp;; l'île de Minkowski teste une seconde fractale.</li>
+        <li data-lang="en"><strong>Analyse in Python.</strong> With pandas: express each G relative to the square at the same wall thickness, find the thickness at which each depth stops paying off and compare it with the size of its details, then correlate G with the candidate drivers (perimeter, outer wall surface).</li>
+        <li data-lang="fr"><strong>Analyser en Python.</strong> Avec pandas&nbsp;: rapporter chaque G à celui du carré de même épaisseur, trouver l'épaisseur à partir de laquelle chaque profondeur cesse d'être utile et la comparer à la taille de ses détails, puis corréler G avec les facteurs candidats (périmètre, surface extérieure du mur).</li>
+      </ol>
+    </section>
+
+    <section class="block block-rule split" aria-labelledby="results-h">
       <h2 id="results-h"><span data-lang="en">Key results</span><span data-lang="fr">Résultats</span></h2>
       <ol class="list">
         <li data-lang="en"><strong>The fractal sheds heat better, up to a point.</strong> A depth-3 Koch snowflake loses 66&nbsp;% more heat per degree of temperature difference than the square. At depth 4 the gain falls back to 44&nbsp;%: the details (9 cm) are thinner than the wall (20 cm), which fills them in.</li>
@@ -113,36 +140,20 @@
     <figure class="block">
       <img class="plot" src="../assets/img/loi_epaisseur.webp" width="1600" height="591" loading="lazy" decoding="async" data-i18n="alt" alt="Conductance relative to the square as a function of wall thickness, one curve per depth; each curve drops just before the wall reaches the size of its details" data-alt-en="Conductance relative to the square as a function of wall thickness, one curve per depth; each curve drops just before the wall reaches the size of its details" data-alt-fr="Conductance relative au carré en fonction de l'épaisseur du mur, une courbe par profondeur&nbsp;; chaque courbe chute peu avant que le mur atteigne la taille de ses détails">
       <figcaption>
-        <span data-lang="en">Fig. 3 — The optimal depth falls as the wall thickens: 4 up to 7 cm, 3 from 8 to 22 cm, then 2 up to 45 cm (36 m² room; figure labels in French).</span>
-        <span data-lang="fr">Fig. 3 — La profondeur optimale baisse quand le mur s'épaissit&nbsp;: 4 jusqu'à 7 cm, 3 de 8 à 22 cm, puis 2 jusqu'à 45 cm (pièce de 36 m²).</span>
+        <span data-lang="en">Fig. 3 — The optimal depth falls as the wall thickens: 4 up to 7 cm, 3 from 8 to 22 cm, then 2 up to 45 cm for the Koch snowflake (left) and the Minkowski island (right); 36 m² room, figure labels in French.</span>
+        <span data-lang="fr">Fig. 3 — La profondeur optimale baisse quand le mur s'épaissit&nbsp;: 4 jusqu'à 7 cm, 3 de 8 à 22 cm, puis 2 jusqu'à 45 cm, pour le flocon de Koch (à gauche) et l'île de Minkowski (à droite)&nbsp;; pièce de 36 m².</span>
       </figcaption>
     </figure>
 
-    <section class="block block-rule split" aria-labelledby="method-h">
-      <h2 id="method-h"><span data-lang="en">Method</span><span data-lang="fr">Méthode</span></h2>
-      <ul class="list">
-        <li data-lang="en"><strong>Model.</strong> Horizontal cross-section of a room in physical units: air stirred by convection, modelled as an effective conductivity; 20 cm concrete walls; surface resistances from ISO 6946; outside held at 20 °C.</li>
-        <li data-lang="fr"><strong>Modèle.</strong> Coupe horizontale d'une pièce en unités physiques&nbsp;: air brassé représenté par une conductivité effective&nbsp;; murs en béton de 20 cm&nbsp;; résistances superficielles de la norme ISO 6946&nbsp;; extérieur à 20 °C.</li>
-        <li data-lang="en"><strong>Finite volumes</strong>, conservative by construction: the energy balance closes to machine precision.</li>
-        <li data-lang="fr"><strong>Volumes finis</strong>, conservatifs par construction&nbsp;: le bilan d'énergie boucle à la précision machine.</li>
-        <li data-lang="en"><strong>Time stepping:</strong> Douglas-Rachford alternating-direction implicit scheme. Each row and column is a tridiagonal system solved in O(n) with the Thomas algorithm; unconditionally stable, where an explicit scheme would need Δt ≈ 0.004 s.</li>
-        <li data-lang="fr"><strong>Pas de temps&nbsp;:</strong> schéma implicite par directions alternées (Douglas-Rachford). Chaque ligne et colonne est un système tridiagonal résolu en O(n) par l'algorithme de Thomas&nbsp;; stable pour tout pas de temps, là où un schéma explicite imposerait Δt ≈ 0,004 s.</li>
-        <li data-lang="en"><strong>Steady state</strong> solved directly by diagonally preconditioned conjugate gradient: about 10 s on a 1200 × 1200 grid instead of 5 to 12 simulated days.</li>
-        <li data-lang="fr"><strong>Régime établi</strong> résolu directement par gradient conjugué préconditionné par la diagonale&nbsp;: une dizaine de secondes sur une grille de 1200 × 1200, au lieu de 5 à 12 jours simulés.</li>
-        <li data-lang="en"><strong>Parametric sweep</strong> in Python: 21 wall thicknesses (5 to 45 cm) and two control shape families to separate the effect of the fractal from the effect of wall length.</li>
-        <li data-lang="fr"><strong>Balayage paramétrique</strong> en Python&nbsp;: 21 épaisseurs de mur (5 à 45 cm) et deux familles de formes témoins pour séparer l'effet de la fractale de celui de la longueur du mur.</li>
-      </ul>
-    </section>
-
     <section class="block block-rule split" aria-labelledby="valid-h">
-      <h2 id="valid-h">Validation</h2>
+      <h2 id="valid-h"><span data-lang="en">Can the numbers be trusted?</span><span data-lang="fr">Peut-on se fier aux chiffres&nbsp;?</span></h2>
       <div class="prose">
-        <p data-lang="en"><strong>Exact solution.</strong> A circular room, whose temperature profile is known in closed form, run through the unmodified simulation code at three resolutions: error on the conductance of −1.5&nbsp;%, −0.85&nbsp;% and −0.45&nbsp;% (first-order convergence). Without the surface corrections, the error stays stuck at +14&nbsp;% at every resolution — a bias that would have favoured the fractal.</p>
-        <p data-lang="fr"><strong>Solution exacte.</strong> Une pièce circulaire, dont le profil de température est connu exactement, simulée avec le code inchangé à trois résolutions&nbsp;: erreur sur la conductance de −1,5&nbsp;%, −0,85&nbsp;% et −0,45&nbsp;% (convergence d'ordre 1). Sans les corrections de surface, l'erreur reste bloquée à +14&nbsp;% à toutes les résolutions — un biais qui aurait favorisé la fractale.</p>
-        <p data-lang="en"><strong>Grid convergence</strong> on the real shapes: the conductance changes by 0.03&nbsp;% (Koch 0) to 1&nbsp;% (Koch 4) between 1.25 cm and 0.625 cm cells.</p>
-        <p data-lang="fr"><strong>Convergence en maillage</strong> sur les vraies formes&nbsp;: la conductance ne varie plus que de 0,03&nbsp;% (Koch 0) à 1&nbsp;% (Koch 4) entre des mailles de 1,25 cm et de 0,625 cm.</p>
-        <p data-lang="en">Each test exposed a real defect in the original model (diffusivity used in place of conductivity, <code>float</code> precision stalling the solver, one-pixel walls 15&nbsp;% too conductive), each fixed and documented.</p>
-        <p data-lang="fr">Chaque test a révélé un vrai défaut du modèle d'origine (diffusivité utilisée à la place de la conductivité, précision <code>float</code> qui figeait le calcul, murs d'un pixel 15&nbsp;% trop conducteurs), chacun corrigé et documenté.</p>
+        <p data-lang="en"><strong>Checked against an exact solution.</strong> A circular room, whose temperature profile is known exactly, run through the unmodified code at three resolutions: error of −1.5&nbsp;%, −0.85&nbsp;% and −0.45&nbsp;%, roughly halving each time the grid is refined. Without the surface corrections, the error stays stuck at +14&nbsp;% — a bias that would have favoured the fractal.</p>
+        <p data-lang="fr"><strong>Comparé à une solution exacte.</strong> Une pièce circulaire, dont le profil de température est connu exactement, simulée avec le code inchangé à trois résolutions&nbsp;: erreur de −1,5&nbsp;%, −0,85&nbsp;% et −0,45&nbsp;%, à peu près divisée par deux à chaque raffinement. Sans les corrections de surface, l'erreur reste bloquée à +14&nbsp;% — un biais qui aurait favorisé la fractale.</p>
+        <p data-lang="en"><strong>Stable when the grid is refined:</strong> results change by 0.03&nbsp;% to 1&nbsp;% between 1.25 cm and 0.625 cm cells, and the best depth is the same at every resolution.</p>
+        <p data-lang="fr"><strong>Stable quand on affine le maillage&nbsp;:</strong> les résultats varient de 0,03&nbsp;% à 1&nbsp;% entre des mailles de 1,25 cm et de 0,625 cm, et la meilleure profondeur est la même à toutes les résolutions.</p>
+        <p data-lang="en"><strong>Every test found a real bug</strong> in the original model (diffusivity used in place of conductivity, <code>float</code> precision stalling the solver, one-pixel walls 15&nbsp;% too conductive). Each was fixed and documented.</p>
+        <p data-lang="fr"><strong>Chaque test a révélé un vrai défaut</strong> du modèle d'origine (diffusivité utilisée à la place de la conductivité, précision <code>float</code> qui figeait le calcul, murs d'un pixel 15&nbsp;% trop conducteurs). Chacun a été corrigé et documenté.</p>
       </div>
     </section>
 
@@ -156,6 +167,20 @@
         <figcaption><span data-lang="en">Heat-flux view (W/m²): the tips carry a lot of heat, the bottoms of the notches very little.</span><span data-lang="fr">Vue flux (W/m²)&nbsp;: les pointes évacuent beaucoup, le fond des creux très peu.</span></figcaption>
       </figure>
     </div>
+
+    <section class="block block-rule split" aria-labelledby="method-h">
+      <h2 id="method-h"><span data-lang="en">Numerical method</span><span data-lang="fr">Méthode numérique</span></h2>
+      <ul class="list">
+        <li data-lang="en"><strong>Model:</strong> horizontal cross-section of a room in physical units; stirred air as an effective conductivity; 20 cm concrete walls; ISO 6946 surface resistances; outside held at 20 °C.</li>
+        <li data-lang="fr"><strong>Modèle&nbsp;:</strong> coupe horizontale d'une pièce en unités physiques&nbsp;; air brassé représenté par une conductivité effective&nbsp;; murs en béton de 20 cm&nbsp;; résistances superficielles de la norme ISO 6946&nbsp;; extérieur à 20 °C.</li>
+        <li data-lang="en"><strong>Finite volumes</strong>, conservative by construction: the energy balance closes to machine precision.</li>
+        <li data-lang="fr"><strong>Volumes finis</strong>, conservatifs par construction&nbsp;: le bilan d'énergie boucle à la précision machine.</li>
+        <li data-lang="en"><strong>Time stepping:</strong> implicit alternating-direction scheme (Douglas-Rachford); each row and column is a tridiagonal system solved in O(n) with the Thomas algorithm.</li>
+        <li data-lang="fr"><strong>Pas de temps&nbsp;:</strong> schéma implicite par directions alternées (Douglas-Rachford)&nbsp;; chaque ligne et colonne est un système tridiagonal résolu en O(n) par l'algorithme de Thomas.</li>
+        <li data-lang="en"><strong>Steady state</strong> solved directly by preconditioned conjugate gradient: about 10 s on a 1200 × 1200 grid instead of 5 to 12 simulated days.</li>
+        <li data-lang="fr"><strong>Régime établi</strong> résolu directement par gradient conjugué préconditionné&nbsp;: une dizaine de secondes sur une grille de 1200 × 1200, au lieu de 5 à 12 jours simulés.</li>
+      </ul>
+    </section>
 
     <section class="block block-rule split" aria-labelledby="limits-h">
       <h2 id="limits-h"><span data-lang="en">Limitations</span><span data-lang="fr">Limites</span></h2>
@@ -175,6 +200,7 @@
     </nav>
   </div>
 </main>
+
 
 <footer class="site-footer" id="contact">
   <div class="wrap">

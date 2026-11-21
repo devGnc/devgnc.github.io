@@ -542,6 +542,8 @@ html[data-theme="dark"] .diagram-box { border-color: var(--line); }
   max-width: 20em;
 }
 .page-lead { font-size: clamp(1.05rem, 2.2vw, 1.2rem); color: var(--ink-2); max-width: 46em; }
+.page-context { margin-top: 14px; font-size: 1rem; color: var(--muted); }
+.page-context strong { color: var(--ink-2); }
 .page-links { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
 .summary {

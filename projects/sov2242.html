@@ -6,6 +6,17 @@
 <title>SOV2242 — Devrim Genc</title>
 <meta name="description" data-i18n="content" data-content-en="SOV2242, a multiplayer PvPvE extraction shooter on Roblox in development: asymmetric factions, separate economies and a server-authoritative architecture in Luau." data-content-fr="SOV2242, jeu de tir d'extraction PvPvE multijoueur sur Roblox en développement&nbsp;: factions asymétriques, économies séparées et architecture à serveur autoritaire en Luau." content="SOV2242, a multiplayer PvPvE extraction shooter on Roblox in development: asymmetric factions, separate economies and a server-authoritative architecture in Luau.">
 <meta name="theme-color" content="#F7F6F2">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Devrim Genc">
+<meta property="og:title" content="SOV2242 — Devrim Genc">
+<meta property="og:description" content="Multiplayer PvPvE extraction game on Roblox in development: asymmetric factions and a server-authoritative architecture.">
+<meta property="og:url" content="https://devgnc.github.io/projects/sov2242.html">
+<meta property="og:image" content="https://devgnc.github.io/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Devrim Genc — data portfolio">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://devgnc.github.io/projects/sov2242.html">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="../assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script>
@@ -67,7 +78,7 @@
     <section class="summary" aria-label="Summary" data-i18n="aria-label" data-aria-label-en="Summary" data-aria-label-fr="En bref">
       <div><span class="label"><span data-lang="en">Role</span><span data-lang="fr">Rôle</span></span><p class="sub" data-lang="en">Solo developer: game design, architecture, level design, development.</p><p class="sub" data-lang="fr">Seul sur le projet&nbsp;: game design, architecture, level design, développement.</p></div>
       <div><span class="label"><span data-lang="en">Codebase</span><span data-lang="fr">Code</span></span><span class="big big--plain">~10k</span><p class="sub" data-lang="en">lines of Luau across 45 modules (server, client, shared)</p><p class="sub" data-lang="fr">lignes de Luau réparties en 45 modules (serveur, client, partagé)</p></div>
-      <div><span class="label"><span data-lang="en">Status</span><span data-lang="fr">État</span></span><p class="sub" data-lang="en">Core systems done; airdrops and rounds in a first version; missions, ranks and radiation still to build.</p><p class="sub" data-lang="fr">Systèmes de base terminés&nbsp;; largages et manches en première version&nbsp;; missions, grades et radiation à construire.</p></div>
+      <div><span class="label"><span data-lang="en">Status</span><span data-lang="fr">État</span></span><p class="sub" data-lang="en">Combat, mutant AI, economy, traps and radar done; airdrops and rounds in a first version; missions still to build.</p><p class="sub" data-lang="fr">Combat, IA des mutants, économie, pièges et radar terminés&nbsp;; largages et manches en première version&nbsp;; missions à construire.</p></div>
       <div><span class="label"><span data-lang="en">Release</span><span data-lang="fr">Sortie</span></span><p class="sub" data-lang="en">Early access targeted for Q1 2027. Private repository — code available on request.</p><p class="sub" data-lang="fr">Accès anticipé visé au 1er trimestre 2027. Dépôt privé — code disponible sur demande.</p></div>
     </section>
 
@@ -142,19 +153,7 @@
           <li data-lang="fr"><strong>Un seul point d'entrée pour l'économie.</strong> Toute variation de monnaie passe par un service unique qui impose la règle faction ↔ monnaie&nbsp;; les transactions de boutique sont atomiques.</li>
           <li data-lang="en"><strong>Dependency injection for player data.</strong> Services never load profiles themselves; the orchestrator hands them a single accessor.</li>
           <li data-lang="fr"><strong>Injection de dépendances pour les données joueur.</strong> Les services ne chargent jamais les profils eux-mêmes&nbsp;; l'orchestrateur leur fournit un accès unique.</li>
-          <li data-lang="en"><strong>Two loot tiers.</strong> Session loot is lost on death; the permanent inventory is only updated on a successful extraction.</li>
-          <li data-lang="fr"><strong>Deux niveaux de butin.</strong> Le butin de session est perdu à la mort&nbsp;; l'inventaire permanent n'est mis à jour qu'à l'extraction.</li>
-          <li data-lang="en"><strong>Match service as the PvP authority.</strong> Player-versus-player damage is only allowed in the Combat phase and never within a faction; the Alpha mutant's armour is directional, computed from the attacker's server-side position.</li>
-          <li data-lang="fr"><strong>Le service de manche arbitre le PvP.</strong> Les dégâts entre joueurs ne sont autorisés qu'en phase de Combat et jamais au sein d'une faction&nbsp;; l'armure du mutant Alpha est directionnelle, calculée à partir de la position du tireur côté serveur.</li>
         </ul>
-      </div>
-    </section>
-
-    <section class="block block-rule split" aria-labelledby="prog-h">
-      <h2 id="prog-h"><span data-lang="en">Progress</span><span data-lang="fr">Avancement</span></h2>
-      <div class="cards">
-        <div class="card"><span class="label badge--done" style="color:var(--done)"><span data-lang="en">Done</span><span data-lang="fr">Fait</span></span><p data-lang="en">Factions and persistence · combat (ranged and melee, ammo, reloading) · mutant AI (Runner, Alpha) · economy, permanent inventory and merchants · new-player initiation · traps and defusing · asymmetric radar · greybox of the three maps.</p><p data-lang="fr">Factions et persistance · combat (distance et mêlée, munitions, rechargement) · IA des mutants (Rôdeur, Alpha) · économie, inventaire permanent et marchands · initiation des nouveaux joueurs · pièges et désamorçage · radar asymétrique · greybox des trois cartes.</p></div>
-        <div class="card"><span class="label" style="color:var(--progress)"><span data-lang="en">In progress / next</span><span data-lang="fr">En cours / à venir</span></span><p data-lang="en">Orbital airdrops and match rounds (first version in place) · faction arsenal and armour · missions and ranks · radiation · art pass on the maps before release.</p><p data-lang="fr">Largages orbitaux et manches (première version en place) · arsenal et armures par faction · missions et grades · radiation · passe artistique des cartes avant la sortie.</p></div>
       </div>
     </section>
 
