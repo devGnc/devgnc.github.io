@@ -18,6 +18,7 @@ assets/fonts/               IBM Plex Sans / Mono, self-hosted (SIL Open Font Lic
 assets/img/                 WebP images and posters
 assets/video/               short MP4 + WebM loops
 assets/cv/devrim-genc-cv.pdf
+assets/docs/                rapport-diffusion-thermique.pdf (heat-diffusion report, French)
 ```
 
 ## Editing content
